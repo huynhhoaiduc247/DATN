@@ -1,0 +1,193 @@
+﻿@model IEnumerable<MvcApp.ServiceReference1.BacSi>
+@using MvcApp.ServiceReference1
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<KhoaB> dskhoa = (List<KhoaB>)ViewBag.khoa;
+}
+
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+
+<h2>Quản lý bác sĩ</h2>
+<div style="padding-bottom:20px">
+    <a href="@Url.Action("Create","QLBaciSi")" class="btn btn-dropbox"><i class="glyphicon glyphicon-plus"></i>Thêm mới bác sĩ </a>
+</div>
+<table class="display" id="datatable">
+    <thead>
+        <tr>
+            <th>
+                Mã bác sĩ
+            </th>
+             <th>
+                Tên bác sĩ
+            </th>
+          
+            <th>
+                Địa chỉ
+            </th>
+            
+            <th>
+                Tên khoa
+            </th>
+          
+            <th>
+                Phòng khám
+            </th>
+            <th>
+                SĐT
+            </th>
+           
+          
+            <th></th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaBacSi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TenBacSi)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Diachi)
+                </td>
+              
+                @{
+                    foreach (var it in dskhoa)
+                    {
+                        if (it.Makhoa == item.Makhoa)
+                        {
+                            <td>
+                                @it.TenKhoa
+                    </td>
+                        }
+                    }
+
+                }
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phongkham)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SDTBS)
+                </td>
+               
+              
+                
+                <td> @Html.ActionLink("Cập nhật", "Edit",new { id = item.MaBacSi }, htmlAttributes: new { @class = "btn btn-success" })</td>
+                    
+                <td> @Html.ActionLink("Xóa", "Delete", new { id = item.MaBacSi }, htmlAttributes: new { @class = "btn btn-danger xoa" }) </td>
+               
+            </tr>
+                    }
+    </tbody>    
+</table>
+
+<div class="modal fade" id="itemModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 style="margin-left:200px" class="modal-title"><label id="title">Xóa bác sĩ</label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="hidden" class="form-control" id="Id" />
+                            <h3>Bạn có chắc muốn xóa ?</h3><br />
+                            <label class="text-danger">Lưu ý: Việc này có thể xóa đi 1 vài dữ liệu khác có liên quan đến dữ liệu này</label>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Hủy Bỏ</button>
+                <a id="btnDelete" class="btn btn-primary">Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section script{
+
+    @*<script>
+            $(document).ready(function () {
+
+                $('#datatable').DataTable({
+                    "pagingType": "full_numbers"
+                });
+            });
+    </script>*@
+
+
+
+    <script>
+        $(document).on('click', '.xoa', function (e) {
+            e.preventDefault();
+            var lin = $(this).attr("href");
+            
+            $("#btnDelete").attr("href", lin);
+            $("#itemModal").modal('show');
+        });
+
+
+
+
+
+        $(document).ready(function () {
+
+         
+            // DataTable
+            var table = $('#datatable').DataTable({
+                "language": {
+
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Xem _MENU_ mục",
+                    "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                    "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                    "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sPrevious": "Trước",
+                        "sNext": "Tiếp",
+                        "sLast": "Cuối"
+                    }
+                }
+            });
+
+            // Apply the search
+            //table.columns().every(function () {
+            //    var that = this;
+
+            //    $('input', this.footer()).on('keyup change', function () {
+            //        if (that.search() !== this.value) {
+            //            that
+            //                .search(this.value)
+            //                .draw();
+            //        }
+            //    });
+            //});
+        });
+
+    </script>
+}

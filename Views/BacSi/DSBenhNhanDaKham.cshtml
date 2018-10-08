@@ -1,0 +1,239 @@
+﻿@model IEnumerable<MvcApp.ServiceReference1.PhieuKham>
+@using MvcApp.ServiceReference1
+@{
+    ViewBag.Title = "Danh sách khám";
+    Layout = "~/Views/Shared/_LayoutBacSi.cshtml";
+    List<BenhNhan> bn = (List<BenhNhan>)ViewBag.BenhNhan;
+    List<BacSi> bs = (List<BacSi>)ViewBag.BacSi;
+    List<PhieuKham> lst = (List<PhieuKham>)Session["PhieuKham"];
+}
+<h2>Danh sách bệnh nhân đã khám hôm nay ngày: @DateTime.Today.ToShortDateString()</h2>
+
+
+<table id="datatable"style="width: 100%;" class="display">
+    <thead>
+        <tr>
+            <th hidden="hidden">
+                @Html.DisplayNameFor(model => model.MaBacSi)
+            </th>
+            <th>
+                STT
+            </th>
+            <th>
+                Họ tên bệnh nhân
+            </th>
+
+            <th>
+                Địa Chỉ
+            </th>
+            <th>
+                Tuổi
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        
+
+            @foreach (var it in Model)
+            {
+                if (it.TrangThai == "Đã khám")
+                {
+                    <tr>
+                        <td hidden="hidden">
+                            @Html.DisplayFor(modelItem => it.MaBacSi)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => it.SoThuTu)
+                        </td>
+                        @{
+                            foreach (var b in bn)
+                            {
+                                if (b.MaBenhNhan == it.MaBenhNhan)
+                                {
+                                    <td>@b.HoTenBenhNhan</td>
+                                    <td>
+                                        @b.DiaChi
+                                    </td>
+                                    <td>
+                                        @b.Tuoi
+                                    </td>
+                                }
+                            }
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => it.TrangThai)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Chi tiết", "Edit", new { id = it.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-success" })
+                        </td>
+                        <td>
+                           @Html.ActionLink("Lich sử khám", "DsPhieuKhambn", new { id = it.MaBenhNhan }, htmlAttributes: new { @class = "btn btn-warning" })
+                           @*<button class="btn btn-warning btnLichsukham" id="@it.MaPhieuKham" >Lịch sử khám</button>*@
+
+        </td>
+                <td></td>
+            </tr>
+                        }
+
+                    }
+
+    </tbody>
+    @*<tfoot>
+            <tr>
+                <th hidden="hidden">Mã bác sĩ</th>
+                <th>Mã bệnh nhân</th>
+                <th>Họ tên bệnh nhân</th>
+                <th>Ngày khám</th>
+                <th>STT</th>
+                <th>Trạng thái</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>*@
+</table>
+
+@*// lich su khám*@
+<div class="modal fade" id="LichSuModal">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title" style="margin-left:150px;"><label id="title">Thông tin Phiếu khám</label></h4>
+            </div>
+            <div class="modal-body">
+                <table class="table" id="tablelichsu">
+                    <thead>
+                        <tr>
+                            <th>
+                                Mã Bệnh nhân
+                            </th>
+                            <th>
+                                Tên Bệnh nhân
+                            </th>
+                            <th>
+                                Địa chỉ
+                            </th>
+                            <th>
+                                Tuổi
+                            </th>
+                            <th>
+                                Ngày khám
+                            </th>
+                            <th>
+                                Bác sĩ khám
+                            </th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @if (lst != null)
+                        {
+
+
+                            foreach (var pk in lst)
+                            {
+                                <tr>
+                                    <td>@pk.MaBenhNhan</td>
+                                    @foreach (var bn1 in bn)
+                                    {
+                                        if (bn1.MaBenhNhan == pk.MaBenhNhan)
+                                        {
+                                            <td>@bn1.HoTenBenhNhan</td>
+                                                <td>@bn1.DiaChi</td>
+                                                <td>@bn1.Tuoi</td>
+                                        }
+                                    }
+                                    <td id="name4">@pk.NgayKham</td>
+                                    @foreach (var bs1 in bs)
+                                    {
+                                        if (bs1.MaBacSi == pk.MaBacSi)
+                                        {
+                                            <td>@bs1.TenBacSi</td>
+                                        }
+                                    }
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section script{
+
+    <script>
+        //$(document).ready(function () {
+
+        //    $('#datatable').DataTable({
+        //        "pagingType": "full_numbers"
+        //    });
+        //});
+
+
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            //$('#datatable tfoot th').each(function () {
+            //    var title = $(this).text();
+            //    if (title != "") {
+            //        $(this).html('<input type="text" placeholder="Search' + '" />');
+            //    }
+            //});
+
+            // DataTable
+            var table = $('#datatable').DataTable({
+                "language": {
+
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Xem _MENU_ mục",
+                    "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                    "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                    "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sPrevious": "Trước",
+                        "sNext": "Tiếp",
+                        "sLast": "Cuối"
+                    }
+                }
+            });
+
+            // Apply the search
+            table.columns().every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change', function () {
+                    if (that.search() !== this.value) {
+                        that
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        });
+
+       
+    </script>
+}   

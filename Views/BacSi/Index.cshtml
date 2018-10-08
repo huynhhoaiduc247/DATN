@@ -1,0 +1,388 @@
+﻿@model IEnumerable<MvcApp.ServiceReference1.PhieuKham>
+@using MvcApp.ServiceReference1
+@{
+    ViewBag.Title = "Danh sách khám";
+    Layout = "~/Views/Shared/_LayoutBacSi.cshtml";
+    List<BenhNhan> bn = (List<BenhNhan>)ViewBag.BenhNhan;
+    List<BacSi> bs = (List<BacSi>)ViewBag.BacSi;
+    List<PhieuKham> lst = (List<PhieuKham>)Session["PhieuKham"];
+    int mabs = (int)ViewBag.mabs;
+}
+<link rel="stylesheet" href="~/Assets/css/Mycss.css"/>
+@*<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>*@
+
+<div hidden="hidden" id="mabs">@mabs</div>
+<h2 style="color:red">Danh sách bệnh nhân hôm nay ngày: @DateTime.Today.ToShortDateString()</h2>
+<br />
+<div id="thongbao" style="cursor:pointer;"></div><br />
+
+<table id="datatable" style="width: 100%;" class="display">
+    <thead>
+        <tr>
+            <th hidden="hidden">
+                @Html.DisplayNameFor(model => model.MaBacSi)
+            </th>
+            <th>
+                STT
+            </th>
+            <th>
+                Họ tên bệnh nhân
+            </th>
+
+            <th>
+                Địa Chỉ
+            </th>
+            <th>
+                Tuổi
+            </th>
+
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            if (item.TrangThai == "Đang Chờ")
+            {
+                <tr>
+                    <td hidden="hidden">
+                        @Html.DisplayFor(modelItem => item.MaBacSi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SoThuTu)
+                        @Html.DisplayFor(modelItem => item.BenhNhan.HoTenBenhNhan)
+                    </td>
+                    @{
+                        foreach (var b in bn)
+                        {
+                            if (b.MaBenhNhan == item.MaBenhNhan)
+                            {
+                               
+                                <td>@b.HoTenBenhNhan</td>
+                                <td>
+                                    @b.DiaChi
+                                </td>
+                                <td>
+                                    @b.Tuoi
+                                </td>
+                            }
+                        }
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrangThai)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Khám", "kham", new { id = item.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-primary" })
+                    </td>
+                    <td>
+                        @*@Html.ActionLink("Lich sử khám", "DsPhieuKhambn", new { id = item.MaBenhNhan }, htmlAttributes: new { @class = "btn btn-warning" })*@
+                        <button class="btn btn-warning btnLichsukham" id="@item.MaBenhNhan">Lịch sử khám</button>
+                    </td>
+                    <td>
+                        @Html.ActionLink("Bỏ qua", "boqua", new { id = item.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-danger" })
+                    </td>
+                
+            </tr>
+                            }
+
+                        }
+
+        @foreach (var itt in Model)
+        {
+            if (itt.TrangThai == "Bỏ qua")
+            {
+                <tr>
+                    <td hidden="hidden">
+                        @Html.DisplayFor(modelItem => itt.MaBacSi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => itt.SoThuTu)
+                    </td>
+                    @{
+                        foreach (var b in bn)
+                        {
+                            if (b.MaBenhNhan == itt.MaBenhNhan)
+                            {
+                               
+                                <td>@b.HoTenBenhNhan</td>
+                                <td>
+                                    @b.DiaChi
+                                </td>
+                                <td>
+                                    @b.Tuoi
+                                </td>
+                            }
+                        }
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => itt.TrangThai)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Khám", "kham", new { id = itt.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-primary" })
+                    </td>
+
+                    <td>
+                        <button class="btn btn-warning btnLichsukham" id="@itt.MaBenhNhan">Lịch sử khám</button>
+                        @*@Html.ActionLink("Lich sử khám", "DsPhieuKhambn", new { id = itt.MaBenhNhan }, htmlAttributes: new { @class = "btn btn-warning btnLichSu" })*@
+                        @*<button class="btn btn-warning btnLichsukham" id="@itt.MaPhieuKham">Lịch sử khám</button>*@
+                    </td>
+                    <td></td>
+                </tr>
+                            }
+
+                        }
+        @*@foreach (var it in Model)
+        {
+            if (it.TrangThai == "Đã khám")
+            {
+                <tr>
+                    <td hidden="hidden">
+                        @Html.DisplayFor(modelItem => it.MaBacSi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => it.SoThuTu)
+                    </td>
+                    @{
+                        foreach (var b in bn)
+                        {
+                            if (b.MaBenhNhan == it.MaBenhNhan)
+                            {
+                                <td>@b.HoTenBenhNhan</td>
+                                <td>
+                                    @b.DiaChi
+                                </td>
+                                <td>
+                                    @b.Tuoi
+                                </td>
+                            }
+                        }
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => it.TrangThai)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Chi tiết", "Edit", new { id = it.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-success" })
+                    </td>
+                    <td>
+                       @Html.ActionLink("Lich sử khám", "DsPhieuKhambn", new { id = it.MaBenhNhan }, htmlAttributes: new { @class = "btn btn-warning" })
+                       @*<button class="btn btn-warning btnLichsukham" id="@it.MaPhieuKham" >Lịch sử khám</button>*@
+                       
+                    @*</td>
+                    <td></td>
+                </tr>
+                            }
+
+                        }*@
+       
+    </tbody>
+    @*<tfoot>
+        <tr>
+            <th hidden="hidden">Mã bác sĩ</th>
+            <th>Mã bệnh nhân</th>
+            <th>Họ tên bệnh nhân</th>
+            <th>Ngày khám</th>
+            <th>STT</th>
+            <th>Trạng thái</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </tfoot>*@
+</table>
+
+@*// lich su khám*@
+<div class="modal fade" id="LichSuModal">
+    
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title" style="margin-left:150px;"><label id="title">Thông tin Phiếu khám</label></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table" id="tablelichsu">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mã Bệnh nhân
+                                </th>
+                                <th>
+                                    Tên Bệnh nhân
+                                </th>
+                                <th>
+                                    Địa chỉ
+                                </th>
+                                <th>
+                                    Tuổi
+                                </th>
+                                <th>
+                                    Ngày khám
+                                </th>
+                                <th>
+                                    Bác sĩ khám
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (lst != null)
+                            {
+
+
+                                foreach (var pk in lst)
+                                {
+                                    <tr>
+                                        <td >@pk.MaBenhNhan</td>
+                                        @foreach (var bn1 in bn)
+                                        {
+                                            if (bn1.MaBenhNhan == pk.MaBenhNhan)
+                                            {
+                                                <td>@bn1.HoTenBenhNhan</td>
+                                                <td>@bn1.DiaChi</td>
+                                                <td>@bn1.Tuoi</td>
+                                            }
+                                        }
+                                        <td id="name4">@pk.NgayKham</td>
+                                        @foreach (var bs1 in bs)
+                                        {
+                                            if (bs1.MaBacSi == pk.MaBacSi)
+                                            {
+                                                <td>@bs1.TenBacSi</td>
+                                            }
+                                        }
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+       
+</div>
+
+@section script{
+
+    <script>
+        //$(document).ready(function () {
+
+        //    $('#datatable').DataTable({
+        //        "pagingType": "full_numbers"
+        //    });
+        //});
+
+
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell
+            //$('#datatable tfoot th').each(function () {
+            //    var title = $(this).text();
+            //    if (title != "") {
+            //        $(this).html('<input type="text" placeholder="Search' + '" />');
+            //    }
+            //});
+
+            // DataTable
+            var table = $('#datatable').DataTable({
+                "language": {
+
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Xem _MENU_ mục",
+                    "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                    "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                    "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sPrevious": "Trước",
+                        "sNext": "Tiếp",
+                        "sLast": "Cuối"
+                    }
+                }
+            });
+
+            // Apply the search
+            //table.columns().every(function () {
+            //    var that = this;
+
+            //    $('input', this.footer()).on('keyup change', function () {
+            //        if (that.search() !== this.value) {
+            //            that
+            //                .search(this.value)
+            //                .draw();
+            //        }
+            //    });
+            //});
+        });
+        
+        
+        $(document).on('click', '.btnLichsukham', function (e) {
+
+            //var $row = $(this).parent().parent().children();
+            //var mabn = $row.find("div[id=mabn]").html();
+            var id = $(this).attr('Id');
+           
+            $.ajax({
+                url: "http://localhost:46814/BacSi/kiemtra/" +id,
+                type: "GET",
+
+                success: function (data, textStatus, jqXHR) {
+                    if (data == 1) {
+                        alert("Bệnh Nhân Chưa khám lần nào")
+
+                        return;
+                    }
+                    else {
+
+                        location.href = "http://localhost:46814/BacSi/DsPhieuKhambn/" + id;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                }
+            });
+        });
+
+    </script>
+<script src="~/scripts/jquery.signalR-2.2.3.min.js"></script>
+<script src="~/signalr/hubs"></script>  
+<script>
+
+        $(function () {
+            var chat = $.connection.khamHub;
+            chat.client.addNewMessageToPage = function (name, message) {
+                if ($('#mabs').html() == message) {
+                    $('#thongbao').append('<h5 onclick="location.reload();" style="color:red;font-style:normal;text-transform:uppercase ; text-align: center">' + 'Có bệnh nhân mới tên: ' + htmlEncode(name) + '  '
+                    + '</h5>');
+            }
+            };
+
+            $.connection.hub.start().done(function () {
+            });
+        });
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+</script>  
+}   

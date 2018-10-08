@@ -1,0 +1,210 @@
+﻿@model MvcApp.ServiceReference1.BacSi
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>Thêm mới bác sĩ</h2>
+
+    <form id="formva" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group col-md-12" style="width:50%;float:left">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TenBacSi, "Tên bác sĩ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.TenBacSi, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TenBacSi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Makhoa, "Khoa", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    <select class="form-control dskhoa" name="dskhoa"></select>
+                    @*@Html.EditorFor(model => model.Makhoa, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.ValidationMessageFor(model => model.Makhoa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ChuyenMon, "Chuyên môn", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.ChuyenMon, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ChuyenMon, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Diachi, "Địa chỉ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.Diachi, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Diachi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            </div>
+        <div class="form-group col-md-12" style="margin-top:40px;width:50%">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SDTBS, "SĐT", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.SDTBS, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SDTBS, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                @Html.LabelFor(model => model.MaBacSi, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaBacSi, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaBacSi, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Phongkham, "Phòng khám", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.Phongkham, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Phongkham, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TrinhDo, "Trình độ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.EditorFor(model => model.TrinhDo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TrinhDo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.MatKhau, "Mật khẩu", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-7">
+                    @Html.PasswordFor(model => model.MatKhau, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-10">
+                    <input type="submit" value="Thêm bác sĩ" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+</form>
+
+
+<div>
+    @Html.ActionLink("Quay về danh sách", "Index")
+</div>
+@section script{
+    <script>
+            $(document).ready(function () {
+                $('.dskhoa').select2();
+            });
+
+
+
+            $(document).ready(function () {
+
+                //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+                $("#formva").validate({
+                    rules: {
+                        TenBacSi: {
+                            required: true,
+                            minlength : 5
+                        },
+
+                        ChuyenMon: {
+                            required: true,
+                            minlength: 2
+                        },
+                        Diachi: {
+                            required: true,
+                            minlength: 5
+                        },
+                        SDTBS: {
+                            required: true,
+                            minlength: 5
+                        },
+                        Phongkham:{
+                            required: true,
+                            minlength: 5
+                        },
+                        TrinhDo:{
+                            required: true,
+                            minlength: 5
+                        },
+                        MatKhau:{
+                            required: true,
+                            minlength: 5
+                        }
+                        
+                    },
+                    messages: {
+                        TenBacSi: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        },
+
+                        ChuyenMon: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 2 ký tự"
+                        },
+                        Diachi: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        },
+                        SDTBS: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        },
+                        Phongkham: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        },
+                        TrinhDo: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        },
+                        MatKhau: {
+                            required: "Bắc buộc nhập",
+                            minlength: "Nhập nhiều hơn 5 ký tự"
+                        }
+                    }
+                });
+            });
+
+
+
+    </script>
+}
+
+<script>
+            $(document).ready(function () {
+                $.ajax({
+                    url: "@Url.Action("dstkhoa", "QLBaciSi")",
+                    type: "GET",
+
+                    dataType: "json",
+
+                    success: function (data, textStatus, jqXHR) {
+                        $.each(data, function (i, item) {
+                            $('.dskhoa').last().append($('<option>', {
+                                value: item.Makhoa,
+                                text: item.TenKhoa
+                            }));
+                        });
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus);
+                    }
+                });
+            });
+</script>

@@ -1,0 +1,204 @@
+﻿@model IEnumerable<MvcApp.ServiceReference1.ToaThuoc>
+@using MvcApp.ServiceReference1;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    List<BenhNhan> l = (List<BenhNhan>)ViewBag.benhnhan;
+
+    List<PhieuKham> p = (List<PhieuKham>)ViewBag.phieu;
+}
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+<h2>Danh sách toa thuốc</h2>
+
+<div id="div-export" style="margin-bottom:10px;">
+    <a href="/QLToaThuoc/XuatToaThuocExcel" class="btn btn-success" id="btn-export">Xuất  Danh sách Toa thuốc</a>
+</div>
+<table class="display" id="datatable">
+    <thead>
+        <tr>
+            <th>
+                <label>Mã toa thuốc</label>
+            </th>
+            <th>
+                <label>Mã phiếu khám</label>
+            </th>
+            <th>
+                <label>Ngày khám</label>
+            </th>
+            <th>
+                <label>Trạng thái</label>
+            </th>
+            <th>
+                <label>Mã bác sĩ</label>
+            </th>
+            <th>
+                <label>Họ tên bệnh nhân</label>
+            </th>
+            <th>
+                <label>Tuổi</label>
+            </th>
+            <th>
+                <label>SĐT</label>
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaToaThuoc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaPhieuKham)
+                </td>
+
+
+                @{
+                    foreach (var it in p)
+                    {
+                        if (it.MaPhieuKham == item.MaPhieuKham)
+                        {
+                            <td>
+                                @it.NgayKham.Value.ToShortDateString()
+
+                            </td>
+                            <td>
+                                @it.TrangThai
+
+                            </td>
+                            <td>
+                                @it.MaBacSi
+
+                            </td>
+                            foreach (var itt in l)
+                            {
+                                if (itt.MaBenhNhan == it.MaBenhNhan)
+                                {
+                                    <td>
+                                        @itt.HoTenBenhNhan
+                                    </td>
+                                    <td>
+                                        @itt.Tuoi
+                                    </td>
+                                    <td>
+                                        @itt.SDT
+                                    </td>
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }
+
+                <td>
+                    @Html.ActionLink("Cập Nhật", "Edit", new { id = item.MaToaThuoc}, htmlAttributes: new { @class = "btn btn-success" })
+                   </td>
+               <td>   @Html.ActionLink("Xóa", "Delete", new { id=item.MaToaThuoc  }, htmlAttributes: new { @class = "btn btn-danger xoa" })
+                </td>
+            </tr>
+        }
+    </tbody>    
+</table>
+<div class="modal fade" id="itemModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 style="margin-left:250px" class="modal-title"><label id="title">Xóa</label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="hidden" class="form-control" id="Id" />
+                            <h3>Bạn có chắc muốn xóa ?</h3><br />
+                            <label class="text-danger">Lưu ý: Việc này có thể xóa đi 1 vài dữ liệu khác có liên quan đến dữ liệu này</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Hủy Bỏ</button>
+                <a id="btnDelete" class="btn btn-primary">Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section script{
+
+<script>
+            //$(document).ready(function () {
+
+            //    $('#datatable').DataTable({
+            //        "pagingType": "full_numbers"
+            //    });
+    //});
+    $(document).on('click', '.xoa', function (e) {
+        e.preventDefault();
+        var lin = $(this).attr("href");
+
+        $("#btnDelete").attr("href", lin);
+        $("#itemModal").modal('show');
+    });
+
+
+    $(document).ready(function () {
+        // Setup - add a text input to each footer cell       
+        // DataTable
+        var table = $('#datatable').DataTable({
+            "language": {
+
+                "sProcessing": "Đang xử lý...",
+                "sLengthMenu": "Xem _MENU_ mục",
+                "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                "sInfoPostFix": "",
+                "sSearch": "Tìm:",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "Đầu",
+                    "sPrevious": "Trước",
+                    "sNext": "Tiếp",
+                    "sLast": "Cuối"
+                }
+            }
+        });
+
+
+        //// Apply the search
+        //table.columns().every(function () {
+        //    var that = this;
+
+        //    $('input', this.footer()).on('keyup change', function () {
+        //        if (that.search() !== this.value) {
+        //            that
+        //                .search(this.value)
+        //                .draw();
+        //        }
+        //    });
+        //});
+    });
+</script> 
+}
+
+
+
+
+
+

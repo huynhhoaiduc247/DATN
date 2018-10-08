@@ -1,0 +1,190 @@
+﻿@model MvcApp.ServiceReference1.thuocEntity
+@using MvcApp.ServiceReference1
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    ViewBag.Title = "Create";
+    List<Thuoc> lst = (List<Thuoc>)ViewBag.listthuoc;
+}
+
+
+    <form id="formva" method="post">
+        @Html.AntiForgeryToken()
+        <fieldset class="form-horizontal">
+            <legend>Thêm thông tin thuốc:</legend>
+                
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Mã thuốc</label>
+                    <div class="col-md-6">
+                        <input type="text" id="mathuocc" name="mathuoc" class="form-control" />
+                    </div>
+                    <div class="col-md-3 text-danger" id="thongbao">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Tên thuốc</label>
+                    <div class="col-md-6">
+                        <input type="text" name="tenthuoc" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Đơn vị tính</label>
+                    <div class="col-md-6">
+                        <input type="text" name="donvitinh" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Giá</label>
+                    <div class="col-md-6">
+                        <input type="number" name="gia" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Hạn sử dụng</label>
+                    <div class="col-md-6">
+                        <input type="text" name="hansudung" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Nhà sản xuất</label>
+                    <div class="col-md-6">
+                        <input type="text" name="nhasanxuat" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Ngày sản xuất</label>
+                    <div class="col-md-6">
+                        <input type="date" name="ngaysanxuat" class="form-control" />
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Số lượng</label>
+                    <div class="col-md-6">
+                        <input type="number" name="soluong" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Thêm" class="btn btn-primary" onclick="createbtn()" id="ct"/>
+                    </div>
+                </div>
+           
+        </fieldset>
+    </form>
+
+
+<div>
+    @Html.ActionLink("Quay về danh sách", "Index")
+</div>
+
+@section script{
+    <script>
+        function createbtn() {
+            this.event.preventDefault();
+            var ma = document.getElementById("mathuocc").value;
+            
+            
+
+           
+            $.ajax({
+                url: "http://localhost:46814/QLThuoc/getthuocjson/"+ma.toString(),
+                type: "GET",
+
+            dataType: "json",
+
+            success: function (data, textStatus, jqXHR) {
+                
+                    if (data.MaThuoc != null)
+                    {
+                        document.getElementById("thongbao").innerHTML = "Trùng mã thuốc";
+                    }
+                    else {
+                        document.getElementById("thongbao").innerHTML = "";
+                        $("form").submit();
+                    }
+                    
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+           
+
+        }
+
+
+
+
+        $(document).ready(function () {
+
+            //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+            $("#formva").validate({
+                rules: {
+                    mathuoc: "required",
+
+                    tenthuoc: {
+                        required: true,
+                        minlength: 2
+                    },
+                    donvitinh: "required",
+                    gia: {
+                        required: true,
+                        digits: true,
+                        min:500
+                    },
+                    hansudung: "required",
+                    nhasanxuat: "required",
+                    ngaysanxuat: "required",
+                    soluong: {
+                        required: true,
+                        digits: true
+
+                    }
+                },
+                messages: {
+                    mathuoc: "Vui lòng nhập",
+
+                    tenthuoc: {
+                        required: "Vui lòng nhập",
+                        minlength: "Lớn hơn 2 ký tự"
+                    },
+                    donvitinh: "Vui lòng nhập",
+                    gia: {
+                        required: "Vui lòng nhập",
+                        digits: "Chỉ nhập số dương",
+                        min: "Lớn hơn 500"
+                    },
+                    hansudung: "Vui lòng nhập",
+                    nhasanxuat: "Vui lòng nhập",
+                    ngaysanxuat: "Vui lòng nhập",
+                    soluong: {
+                        required: "Vui lòng nhập",
+                        digits: "Chỉ nhập số dương"
+
+                    }
+                }
+            });
+        });
+
+    </script>
+    }
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

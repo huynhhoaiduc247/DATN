@@ -1,0 +1,171 @@
+﻿@model MvcApp.ServiceReference1.Thuoc
+@using MvcApp.ServiceReference1
+@{
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+    ViewBag.Title = "Edit";
+    Thuoc t = (Thuoc)ViewBag.thuoc;
+}
+
+<h2 style="margin-bottom:30px">Chi tiết thuốc</h2>
+
+<form id="formva" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <fieldset class="form-horizontal">
+        <div class="form-group col-md-12" style="width:50%;float:left">
+            <div class="form-group">
+                <label class="control-label col-md-4">Mã thuốc</label>
+                <div class="col-md-7">
+                    <input type="text" name="mathuoc" class="form-control" value="@t.MaThuoc" readonly="readonly" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Tên thuốc</label>
+                <div class="col-md-7">
+                    <input type="text" name="tenthuoc" class="form-control" value="@t.TenThuoc" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Đơn vị tính</label>
+                <div class="col-md-7">
+                    <input type="text" name="donvitinh" class="form-control" value="@t.DonVitinh" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Giá</label>
+                <div class="col-md-7">
+                    <input type="number" name="gia" class="form-control" value="@t.GiaThuoc" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-12" style="width:50%">
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Hạn sử dụng</label>
+                <div class="col-md-7">
+                    <input type="text" name="hansudung" class="form-control" value="@t.HanSuDung" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Nhà sản xuất</label>
+                <div class="col-md-7">
+                    <input type="text" name="nhasanxuat" class="form-control" value="@t.NhaSanXuat" />
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Ngày sản xuất</label>
+                <div class="col-md-7">
+                    <input type="text" name="ngaysanxuat" class="form-control" value="@t.NgaySanXuat.ToString().Substring(0,10)" />
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label col-md-4">Số lượng</label>
+                <div class="col-md-7">
+                    <input type="number" name="soluong" class="form-control" value="@t.SoLuongThuoc" />
+                </div>
+            </div>
+
+        </div>
+            <div class="form-group" style="width:100%">
+                <div class="col-md-offset-4 col-md-10">
+                    <input type="submit" value="Lưu" class="btn btn-primary" />
+                </div>
+            </div>
+</fieldset>
+
+</form>
+
+<div>
+    <a href="@Url.Action("Index","QLThuoc")" class="btn btn-success"><i class="glyphicon glyphicon-backward"> </i> Quay về danh sách </a>   
+</div>
+
+
+@section script{
+    <script>
+        $.validator.addMethod("anyDate",
+          function (value, element) {
+              return value.match(/^(0?[1-9]|[12][0-9]|3[0-1])[/., -](0?[1-9]|1[0-2])[/., -](19|20)?\d{2}$/);
+          },
+          "Please enter a date in the format!"
+        );
+
+
+        $(document).ready(function () {
+
+            //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+            $("#formva").validate({
+                rules: {
+                    mathuoc: "required",
+
+                    tenthuoc: {
+                        required: true,
+                        minlength: 2
+                    },
+                    donvitinh: "required",
+                    gia: {
+                        required: true,
+                        digits: true,
+                        min:500
+                    },
+                    hansudung: "required",
+                    nhasanxuat: "required",
+                    ngaysanxuat: {
+                        required:true,
+                        anyDate: true
+                    },
+                    soluong: {
+                        required: true,
+                        digits: true
+
+                    }
+                },
+                messages: {
+                    mathuoc: "Vui lòng nhập",
+
+                    tenthuoc: {
+                        required: "Vui lòng nhập",
+                        minlength: "Lớn hơn 2 ký tự"
+                    },
+                    donvitinh: "Vui lòng nhập",
+                    gia: {
+                        required: "Vui lòng nhập",
+                        digits: "Chỉ nhập số dương",
+                        min: "Lớn hơn 500"
+                    },
+                    hansudung: "Vui lòng nhập",
+                    nhasanxuat: "Vui lòng nhập",
+                    ngaysanxuat: {
+                        required: "Vui lòng nhập",
+                        anyDate: "nhập theo dd/mm/yyyy"
+                    },
+                    soluong: {
+                        required: "Vui lòng nhập",
+                        digits: "Chỉ nhập số dương"
+
+                    }
+                }
+            });
+        });
+
+    </script>
+}
+
+
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

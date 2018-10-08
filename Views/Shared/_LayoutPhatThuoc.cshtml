@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Quản lý Phát Thuốc</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="~/Assets/css/bootstrap.min.css"><!--CSS layout chính-->
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet" href="~/Assets/css/font-awesome.min.css">
+    <!--CSS icon của menu->
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="~/Assets/css/ionicons.min.css"><!--CSS icon header-->
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/Assets/css/AdminLTE.min.css"><!--CSS layout admin page-->
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/Assets/css/_all-skins.min.css"><!--CSS màu nền phần head và phần menu-->
+    <link rel="stylesheet" href="~/Assets/css/select2.min.css">
+    <link rel="stylesheet" href="~/Assets/css/jquery.dataTables.min.css">
+    <!-- jQuery 3 -->
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/Assets/js/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+        <header class="main-header">
+            <!-- Logo -->
+            <a href="@Url.Action("Index","PhatThuoc")" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini">TC</span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg">Trang Chủ</span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+
+                </a>
+                <div class="nav navbar-header" style="margin-left:150px;margin-top:-10px;color:#4cff00;padding-top:-20px; width:500px">
+                    <marquee><h3>Chào mừng bạn đến với phòng khám của chúng tôi!</h3></marquee>
+                </div>
+                <div class="navbar-custom-menu">
+                    
+                </div>
+
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu" data-widget="tree">
+                    
+                    <li>
+                        <a href="@Url.Action("Index","PhatThuoc")">
+                            <i class="fa fa-list-alt"></i>
+                            <span>Danh Sách Bệnh Nhân</span>
+                        </a>
+                        <a href="@Url.Action("LogOut","Login")">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            @*<section class="content-header">
+                    <h1>
+                        @ViewBag.Title
+                    </h1>
+                    <ol class="breadcrumb">
+                        <li><a href="@Url.Action("Index","Admin")"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                        <li class="active">@ViewBag.Title</li>
+                    </ol>
+                </section>*@
+            <!-- Main content -->
+            <section class="content">
+                <!-- Small boxes (Stat box) -->
+                <!--Phần nội dụng sẽ được thay đổi-->
+                <div style="padding:10px 0px 80px 30px">
+                    @RenderBody()
+                </div>
+            </section>
+        </div>
+
+
+
+    </div>
+
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+
+            <b>Version</b> 1.0.0
+        </div>
+        <strong>Copyright &copy; 2017-2018 FPT.FSO_NET.HCM17_20</strong>
+    </footer>
+
+
+    <!-- jQuery 3 -->
+    <script src="~/Assets/js/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/Assets/js/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="~/Assets/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Assets/js/adminlte.min.js"></script>
+    <script src="~/Assets/js/jquery.validate.min.js"></script>
+
+
+    <script src="~/Assets/js/select2.min.js"></script>
+    <script src="~/Assets/js/jquery.dataTables.min.js"></script>
+
+    @RenderSection("script", required: false)
+
+
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

@@ -1,0 +1,152 @@
+﻿@model IEnumerable<MvcApp.ServiceReference1.PhieuKham>
+@using MvcApp.ServiceReference1
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPhatThuoc.cshtml";
+    List<BenhNhan> bn = (List<BenhNhan>)ViewBag.BenhNhan;
+}
+
+
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+<h2>Danh sách bệnh nhân chờ Phát thuốc</h2>
+
+
+<table id="datatable" class="display">
+    <thead>
+        <tr>
+            <th hidden="hidden">
+                @Html.DisplayNameFor(model => model.MaBacSi)
+            </th>
+            <th>
+                Mã bệnh nhân
+            </th>
+            <th>
+                Họ tên bệnh nhân
+            </th>
+
+            <th>
+                Mã phiếu khám
+            </th>
+            <th>
+                Ngày khám
+            </th>
+            <th>
+                STT
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var it in Model)
+        {
+            if (it.TrangThai == "Đã khám")
+            {
+                <tr>
+                    <td hidden="hidden">
+                        @Html.DisplayFor(modelItem => it.MaBacSi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => it.MaBenhNhan)
+                    </td>
+                    @{
+                        foreach (var b in bn)
+                        {
+                            if (b.MaBenhNhan == it.MaBenhNhan)
+                            {
+                                <td>@b.HoTenBenhNhan</td>
+                            }
+                        }
+                    }
+
+                    <td>
+                        @Html.DisplayFor(modelItem => it.MaPhieuKham)
+                    </td>
+                    <td>
+                       @it.NgayKham.Value.ToShortDateString()
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => it.SoThuTu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => it.TrangThai)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Phát thuốc", "Edit", new { id = it.MaPhieuKham }, htmlAttributes: new { @class = "btn btn-primary" })
+                    </td>
+
+                    <td></td>
+                </tr>
+                            }
+
+                        }        
+    </tbody>
+   
+</table>
+
+
+
+@section script{
+
+    <script>
+            //$(document).ready(function () {
+
+            //    $('#datatable').DataTable({
+            //        "pagingType": "full_numbers"
+            //    });
+        //});
+
+
+
+
+        $(document).ready(function () {
+            // Setup - add a text input to each footer cell           
+            // DataTable
+            var table = $('#datatable').DataTable({
+                "language": {
+
+                    "sProcessing": "Đang xử lý...",
+                    "sLengthMenu": "Xem _MENU_ mục",
+                    "sZeroRecords": "Không tìm thấy dòng nào phù hợp",
+                    "sInfo": "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "sInfoEmpty": "Đang xem 0 đến 0 trong tổng số 0 mục",
+                    "sInfoFiltered": "(được lọc từ _MAX_ mục)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Tìm:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "Đầu",
+                        "sPrevious": "Trước",
+                        "sNext": "Tiếp",
+                        "sLast": "Cuối"
+                    }
+                }
+            });
+
+            // Apply the search
+            //table.columns().every(function () {
+            //    var that = this;
+
+            //    $('input', this.footer()).on('keyup change', function () {
+            //        if (that.search() !== this.value) {
+            //            that
+            //                .search(this.value)
+            //                .draw();
+            //        }
+            //    });
+            //});
+        });
+
+
+    </script>
+}   

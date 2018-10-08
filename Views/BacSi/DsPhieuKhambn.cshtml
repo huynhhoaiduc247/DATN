@@ -1,0 +1,218 @@
+﻿@model MvcApp.ServiceReference1.BenhNhan
+@using MvcApp.ServiceReference1
+@{
+    ViewBag.Title = "DsPhieuKhambn";
+    Layout = "~/Views/Shared/_LayoutBacSi.cshtml";
+    List<PhieuKham> lst = (List<PhieuKham>)ViewBag.phieukhambn;
+    List<BenhNhan> lstbn = (List<BenhNhan>)ViewBag.bn;
+    List<ToaThuoc> lsttt = (List<ToaThuoc>)ViewBag.ToaThuoc;
+    // List<ChiTietToaThuoc> lstct = (List<ChiTietToaThuoc>)Session["Thuoc"];
+    List<ChiTietToaThuoc> lstct = (List<ChiTietToaThuoc>)ViewBag.cttt;
+    List<Thuoc> lstt = (List<Thuoc>)ViewBag.thuoc;
+    List<ChiTietToaThuoc> lstctoathuoc = (List<ChiTietToaThuoc>)ViewBag.cttoathuoc1;
+    List<thuocEntity> lstctt= (List<thuocEntity>)ViewBag.thuocct;
+    List<BacSi> lstbs = (List<BacSi>)ViewBag.bs;
+}
+@foreach (var b in lstbn)
+{
+    if (b.MaBenhNhan == Model.MaBenhNhan)
+    {
+        <h3 style="margin-bottom:30px;color:blue">Thông Tin bệnh nhân</h3>
+        <div class="form-group" style="width:100%;height:130px;">
+            
+            <div class="col-md-10" style="width:50%; float:left;">
+                <label class="col-md-4">Mã bệnh nhân:</label>
+                <input class="col-md-6" style="margin-bottom:10px" disabled value="@b.MaBenhNhan" />
+                <br />
+                <label class="col-md-4">Họ tên bệnh nhân:</label>
+                <input class="col-md-6" style="margin-bottom:10px" disabled value="@b.HoTenBenhNhan" />
+                <br />
+                <label class="col-md-4">Tuổi:</label>
+                <input class="col-md-6" style="margin-bottom:10px" disabled value="@b.Tuoi" />
+            </div>
+            <div class="col-md-10" style="width:50%;">
+                <label class="col-md-4">Địa chỉ</label>
+                <input class="col-md-6" style="margin-bottom:10px" disabled value="@b.DiaChi" />
+                <br />
+                <label class="col-md-4">Số điện thoại</label>
+                <input class="col-md-6" style="margin-bottom:10px" disabled value="@b.SDT" />
+                <br />
+            </div>
+
+        </div>
+        
+
+    }
+}
+
+<h3 style="margin-bottom:20px;color:blue">Lịch sử khám bệnh </h3>
+<table class="table" style="background-color:white">
+    <thead>
+        <tr>
+            <th>
+                Mã Phiếu khám
+            </th>
+            <th>
+                Ngày khám
+            </th>
+            <th>
+                Bác sĩ khám
+            </th>
+            <th>
+                Kết Quả khám bệnh
+            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+       
+        @foreach (var item in lst)
+        {
+            if (item.MaBenhNhan == Model.MaBenhNhan && item.TrangThai.Equals("Đã khám"))
+            {
+
+                <tr>
+                    <td>
+                        @item.MaPhieuKham
+                    </td>
+                    <td>
+                        @item.NgayKham.Value.ToShortDateString()
+                    </td>
+                    @foreach (var item2 in lstbs)
+                    {
+                        if (item2.MaBacSi == item.MaBacSi)
+                        {
+                            <td>
+                                @item2.TenBacSi
+                            </td>
+                        }
+                    }
+                    @foreach (var item3 in lsttt)
+                    {
+                        if (item.MaPhieuKham == item3.MaPhieuKham)
+                        {
+                            <td colspan="2">
+                                @item3.KetQuaKhamBenh
+                            </td>
+                            
+                            <td>
+                                <button id="@item3.MaToaThuoc" class="btn btn-primary btnXemToaThuoc">Xem toa thuốc</button>
+                            </td>
+                        }
+                    }
+                    
+                </tr>
+
+
+            }
+            
+
+        }
+
+    </tbody>
+</table>
+
+@*model chi tiet Phieu kham*@
+<div class="modal fade" id="XemToaThuocModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h4 class="modal-title" style="margin-left:180px;"><label id="title">Chi tiết toa thuốc</label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label class="col-md-4">Mã Toa thuốc</label>
+                            <div class="col-md-8">
+                                <input type="text" id="MaToaThuoc" disabled class="form-control" />
+                            </div>
+
+                        </div>
+                    </div>                   
+                    <table id="tableThuoc" class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Tên Thuốc
+                                </th>
+                                <th>
+                                    Số lượng dùng
+                                </th>
+                                <th>
+                                    Liều dùng
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (lstctoathuoc == null)
+                            {
+                               <tr>
+                                     <td>
+                                         Không có toa thuốc
+                                      </td>
+                                </tr>
+                            }
+                            else
+                            {
+                          foreach (var item in lstctoathuoc)
+                                {
+                                    <tr>
+                                        @foreach (var it in lstctt)
+                                        {
+                                        if (it.maThuoc == item.MaThuoc)
+                                        {
+                                        <td>
+                                            @it.tenThuoc
+                                        </td>
+                                        <td>
+                                            @item.SoLuong
+                                        </td>
+                                        <td>
+                                            @item.LieuDung
+                                        </td>
+                                        }
+
+
+                                        }
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnClose" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on('click', '.btnXemToaThuoc', function (e) {
+        var id = $(this).attr('Id');
+        $.ajax({
+            url: "@Url.Action("ChiTietToaThuoc", "BacSi")",
+            data:{'id':id},
+            type: "POST",
+
+            dataType: "json",
+
+            success: function (data, textStatus, jqXHR) {
+               
+                $.each(data, function (i, item1) {
+                   
+                        $("#MaToaThuoc").val(item1.MaToaThuoc);                       
+              });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+        $("#XemToaThuocModal").modal('show');
+    });
+</script>

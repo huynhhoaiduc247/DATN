@@ -1,0 +1,117 @@
+﻿@model MvcApp.ServiceReference1.BenhNhan
+@using MvcApp.ServiceReference1;
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPageNhanBenh.cshtml";
+    var lst = (BenhNhan[])ViewBag.BenhNhan;
+    var lstBs = (BacSi[])ViewBag.ListBacSi;
+    var lstPhieuKham = (PhieuKham[])ViewBag.PhieuKham;
+}
+
+<h2>Chỉnh sửa thông tin bệnh nhân @Model.HoTenBenhNhan</h2>
+
+<form id="formEdit" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Họ Tên bệnh nhân", htmlAttributes: new { @class = "control-label col-md-4" })
+
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.HoTenBenhNhan, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HoTenBenhNhan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Địa Chỉ", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Tuổi", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Tuoi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Tuoi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Số điện thoại", htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+   <</form>
+
+<script>
+    $(document).ready(function () {
+
+        //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+        $("#formEdit").validate({
+            rules: {
+                HoTenBenhNhan: {
+                    required: true,
+                    minlength: 5
+                },
+
+                DiaChi: {
+                    required: true,
+                    minlength: 2
+                },
+                Tuoi: {
+                    range: [0, 150],
+                    number: true,
+                    required: true,
+                    minlength: 1,
+                    maxlength:3
+                },
+                SDT: {
+
+                    number:true,
+                    required: true,
+                    minlength: 9,
+                    maxlength: 11
+                }
+
+            },
+            messages: {
+                HoTenBenhNhan: {
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 5 ký tự"
+                },
+
+                DiaChi: {
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 2 ký tự"
+                },
+                Tuoi: {
+                    range: "Nhập từ 0-150",
+                    number: "Chỉ được nhập số",
+                    required: "Bắc buộc nhập",
+                    minlength: "Không được để trống",
+                    maxlength: "Nhập ít hơn 3 ký tự"
+                },
+                SDT: {
+                    number: "Chỉ được nhập số",
+
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 9 ký tự",
+                    maxlength: "Nhập ít hơn 11 ký tự"
+                }
+            }
+        });
+    });
+
+</script>

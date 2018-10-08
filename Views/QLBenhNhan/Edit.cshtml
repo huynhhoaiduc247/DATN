@@ -1,0 +1,127 @@
+﻿@model MvcApp.ServiceReference1.BenhNhan
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<h2>Chi tiết bệnh nhân</h2>
+
+<form id="formva" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.MaBenhNhan, "Mã bệnh nhân", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.MaBenhNhan, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.MaBenhNhan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.HoTenBenhNhan, "Họ tên bệnh nhân", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.HoTenBenhNhan, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HoTenBenhNhan, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DiaChi, "Địa chỉ", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SDT, "SDT", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tuoi, "Tuổi", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-5">
+                @Html.EditorFor(model => model.Tuoi, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Tuoi, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a href="@Url.Action("Index","QLBenhNhan")" class="btn btn-success"><i class="glyphicon glyphicon-backward"> </i> Quay về danh sách </a>   
+</div>
+@section script{
+    <script>
+$(document).ready(function () {
+
+            //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+            $("#formva").validate({
+                rules: {
+
+                    HoTenBenhNhan: {
+                        required: true,
+                        minlength: 5
+                    },
+                    DiaChi:{
+                        required: true,
+                        minlength: 5
+                    },
+                    SDT:{
+                        required: true,
+                        minlength: 5
+
+                    },
+                    Tuoi:{
+                        required: true,
+                        range: [0, 100]
+                    }
+
+                },
+                messages: {
+                    HoTenBenhNhan: {
+                        required: "Bắt buộc nhập",
+                        minlength: "Nhập trên 5 ký tự"
+                    },
+                    DiaChi: {
+                        required: "Bắt buộc nhập",
+                        minlength: "Nhập trên 5 ký tự"
+                    },
+                    SDT: {
+                        required: "Bắt buộc nhập",
+                        minlength: "Nhập trên 5 ký tự"
+
+                    },
+                    Tuoi: {
+                        required: "Bắt buộc nhập",
+                        range: "Tuổi từ 0 -> 100"
+                    }
+
+                }
+            });
+        });
+
+
+    </script>
+
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

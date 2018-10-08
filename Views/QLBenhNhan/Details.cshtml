@@ -1,0 +1,59 @@
+﻿@model MvcApp.ServiceReference1.BenhNhan
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>QL Benh nhan</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.Label("Ma benh nhan")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaBenhNhan)
+        </dd>
+
+        <dt>
+            @Html.Label("Ho ten")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HoTenBenhNhan)
+        </dd>
+
+        <dt>
+            @Html.Label("Dia chi")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaChi)
+        </dd>
+
+        <dt>
+            @Html.Label("SDT")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SDT)
+        </dd>
+
+        <dt>
+            @Html.Label("Tuoi")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tuoi)
+        </dd>
+      
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MaBenhNhan }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,154 @@
+﻿@model MvcApp.ServiceReference1.BenhNhan
+@using MvcApp.ServiceReference1;
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPageNhanBenh.cshtml";
+    var lst = (BenhNhan[])ViewBag.BenhNhan;
+    var lstBs = (BacSi[])ViewBag.ListBacSi;
+    var lstPhieuKham = (PhieuKham[])ViewBag.PhieuKham;
+
+}
+<script src = "~/Assets/js/JavaScript.js" ></script>
+
+    <form id="formCreate" method="post">
+        @Html.AntiForgeryToken()
+        <h3>Thêm Bệnh nhân mới</h3>
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.Label("Họ Tên bệnh nhân", htmlAttributes: new { @class = "control-label col-md-4" })
+
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.HoTenBenhNhan, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.HoTenBenhNhan, "", new { @class = "text-danger" })
+
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Địa Chỉ", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { @class = "form-control", @style = "required" } })
+                    @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Tuổi", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Tuoi, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tuoi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Số điện thoại", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.SDT, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Bác Sĩ khám bệnh", htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-6">
+                    @Html.DropDownList("BacSi", null, htmlAttributes: new { @class = "form-control", @id = "bacsi", @name = "bacsi" })
+
+                </div>
+                <a href="javascript:void(0)" class="btn btn-warning btnXemChiTietbs" data-toggle="tooltip" title="Xem Chi tiết" style="margin-left:10px"><i class="glyphicon glyphicon-list"></i></a>
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-10">
+                    <input type="submit" value="Thêm Bệnh Nhân" class="btn btn-primary" id="sendmessage"/>
+                </div>
+            </div>
+        </div>
+        </form>
+        <div id="discussion"></div>
+<script>
+    $(document).ready(function () {
+
+        //Khi bàn phím được nhấn và thả ra thì sẽ chạy phương thức này
+        $("#formCreate").validate({
+            rules: {
+                HoTenBenhNhan: {
+                    required: true,
+                    minlength: 5
+                },
+
+                DiaChi: {
+                    required: true,
+                    minlength: 2
+                },
+                Tuoi: {
+                    range: [0, 150],
+                    number: true,
+                    required: true,
+                    minlength: 1,
+                    maxlength:3
+                },
+                SDT: {
+                   
+                    number:true,
+                    required: true,                  
+                    minlength: 9,
+                    maxlength: 11
+                }
+
+            },
+            messages: {
+                HoTenBenhNhan: {
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 5 ký tự"
+                },
+
+                DiaChi: {
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 2 ký tự"
+                },
+                Tuoi: {
+                    range: "Nhập từ 0-150",
+                    number: "Chỉ được nhập số",
+                    required: "Bắc buộc nhập",
+                    minlength: "Không được để trống",
+                    maxlength: "Nhập ít hơn 3 ký tự"
+                },
+                SDT: {
+                    number: "Chỉ được nhập số",
+                   
+                    required: "Bắc buộc nhập",
+                    minlength: "Nhập nhiều hơn 9 ký tự",
+                    maxlength: "Nhập ít hơn 11 ký tự"
+                }
+            }
+        });
+    });
+
+</script>
+@section script{
+<script src="~/scripts/jquery.signalR-2.2.3.min.js"></script>
+<script src="~/signalr/hubs"></script>  
+<script>
+
+        $(function () {
+            var chat = $.connection.khamHub;
+            //chat.client.addNewMessageToPage = function (name, message) {
+            //    $('#discussion').append('<ul style="list-style-type:square"><li><strong style="color:red;font-style:normal;font-size:medium;text-transform:uppercase">' + 'Có bệnh nhân mới tên: ' + htmlEncode(name) + '  ' + '<strong style="color:black;font-style:normal;font-size:medium;text-transform:lowercase"></strong>'
+            //        + '</strong>: ' + '</li></ul>');
+            //};
+          
+            $.connection.hub.start().done(function () {
+                $('#sendmessage').click(function () {
+                    chat.server.send($('#HoTenBenhNhan').val(), $('#bacsi').val());
+                  
+                });
+            });
+        });
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+</script>  
+
+
+}
